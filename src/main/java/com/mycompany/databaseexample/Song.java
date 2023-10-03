@@ -10,12 +10,12 @@ package com.mycompany.databaseexample;
  */
 public class Song {
     private int id;
-    private String title;
+    private String name;
     private String artist;
     
-    Song (int id, String title, String artist){
+    Song (int id, String name, String artist){
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.artist = artist;
     }
 
@@ -36,15 +36,15 @@ public class Song {
     /**
      * @return the title
      */
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     /**
      * @param title the title to set
      */
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
