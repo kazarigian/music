@@ -1,0 +1,4 @@
+com\mycompany\databaseexample\App.class
+com\mycompany\databaseexample\DatabaseSQLiteController.class
+com\mycompany\databaseexample\Song.class
+com\mycompany\databaseexample\Artist.class
