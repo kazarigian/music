@@ -63,7 +63,7 @@ public class DatabaseSQLiteController implements Initializable {
         CreateSQLiteTable();
     }
 
-    String databaseURL = "jdbc:sqlite:src/main/resources/com/mycompany/databaseexample/songs";
+    String databaseURL = "jdbc:sqlite:src/main/resources/com/mycompany/databaseexample/songs.db";
 
     /* Connect to a sample database
      */
