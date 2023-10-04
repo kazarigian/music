@@ -93,7 +93,8 @@ public class DatabaseSQLiteController implements Initializable {
         artist.setMinWidth(100);
         artist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
 
-        
+        tableView.setItems(data);
+        tableView.getColumns().addAll(id, title, artist);
         //tableView.setOpacity(0.3);
         /* Allow for the values in each cell to be changable */
     }
