@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="770.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.databaseexample.DatabaseSQLiteController">
+<BorderPane prefHeight="500.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.music.DatabaseSQLiteController">
     <top>
         <BorderPane styleClass="header-section" stylesheets="@demo.css">
             <left>
@@ -67,13 +67,11 @@
     <center>
         <VBox fx:id="vBox" minHeight="600.0" prefHeight="500.0" styleClass="content-section">
             <children>
-                <Label id="content-header" stylesheets="@demo.css" text="Songs Database Application Test" textFill="#11c3c6" />
+                <Label id="content-header" stylesheets="@demo.css" text="Songs Database" textFill="#11c3c6" />
             
                 <!-- container using pref size as max size to not grow larger than the image -->
                 <VBox maxHeight="-Infinity" maxWidth="-Infinity" styleClass="my-rect" stylesheets="@demo.css" />  
             
-            
-                <Label id="content" styleClass="content-section" stylesheets="@demo.css" text="This application uses SQLite and allows adding records, deleting records, searching records, and updating records" />
                 <TableView fx:id="tableView" onMouseClicked="#showRowData" prefHeight="547.0" prefWidth="600.0" />
                 
                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
