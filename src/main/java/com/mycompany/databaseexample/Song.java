@@ -1,19 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.music;
+package com.mycompany.databaseexample;
 
-/**
- *
- * @author ka4865
- */
 public class Song {
+
     private int id;
     private String title;
     private String artist;
-    
-    Song (int id, String title, String artist){
+
+    Song(int id, String title, String artist) {
+
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -32,7 +26,6 @@ public class Song {
     public void setId(int id) {
         this.id = id;
     }
-
     /**
      * @return the title
      */
@@ -60,7 +53,4 @@ public class Song {
     public void setArtist(String artist) {
         this.artist = artist;
     }
-    
-    
-    
 }
