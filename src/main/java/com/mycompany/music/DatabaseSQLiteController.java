@@ -1,4 +1,4 @@
-package com.mycompany.databaseexample;
+package com.mycompany.music;
 
 
 
@@ -63,7 +63,7 @@ public class DatabaseSQLiteController implements Initializable {
         CreateSQLiteTable();
     }
 
-    String databaseURL = "jdbc:sqlite:src/main/resources/com/mycompany/databaseexample/songs.db";
+    String databaseURL = "jdbc:sqlite:src/main/resources/com/mycompany/music/songs.db";
 
     /* Connect to a sample database
      */
@@ -83,7 +83,7 @@ public class DatabaseSQLiteController implements Initializable {
     private void intializeColumns() {
         id = new TableColumn("ID");
         id.setMinWidth(50);
-        id.setCellValueFactory(new PropertyValueFactory<Song, Integer>("id"));
+        //id.setCellValueFactory(new PropertyValueFactory<Song, Integer>("id")); // id needs to be made up instead of input
 
         TableColumn title = new TableColumn("Title");
         title.setMinWidth(450);
