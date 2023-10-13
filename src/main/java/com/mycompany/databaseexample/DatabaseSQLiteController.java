@@ -44,8 +44,9 @@ public class DatabaseSQLiteController implements Initializable {
     private VBox vBox;
 
     @FXML
-    private TextField titleTextField, artistTextField; //where data gets entered by user
-
+    private TextField idTextField, titleTextField, artistTextField; //where data gets entered by user
+    //private IntegerField idTextField;
+    
     @FXML
     Label footerLabel;
     @FXML
@@ -170,7 +171,7 @@ public class DatabaseSQLiteController implements Initializable {
 
      * @throws java.sql.SQLException
      */
-    public void insert(String title, String artist) throws SQLException {
+     /*public void insert(String title, String artist) throws SQLException {
         int last_inserted_id = 0;
         Connection conn = null;
         try {
@@ -221,13 +222,75 @@ public class DatabaseSQLiteController implements Initializable {
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
-
+        //idTextField.setInt();
         titleTextField.setText("");
         artistTextField.setText("");
 
         //re-seting fields after sucessfully inputing info
         footerLabel.setText("Record inserted into table successfully!");
+    } */
+    
+    public void insert(String title, String artist) throws SQLException {
+    int last_inserted_id = 0;
+    Connection conn = null;
+    try {
+        // create a connection to the database
+        conn = DriverManager.getConnection(databaseURL);
+        System.out.println("Connection to SQLite has been established.");
+
+        String sql = "INSERT INTO songs(title, artist) VALUES(?, ?)";
+        PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        pstmt.setString(1, title);
+        pstmt.setString(2, artist);
+        pstmt.executeUpdate();
+        ResultSet rs = pstmt.getGeneratedKeys();
+        if (rs.next()) {
+            last_inserted_id = rs.getInt(1);
+        }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    } finally {
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
+
+    System.out.println("last_inserted_id " + last_inserted_id);
+
+    data.add(new Song(last_inserted_id, title, artist));
+}
+
+    @FXML
+public void handleAddSong(ActionEvent actionEvent) {
+    String title = titleTextField.getText();
+    String artist = artistTextField.getText();
+
+    System.out.println("Title: " + title + "\nArtist: " + artist);
+
+    try {
+        insert(title, artist);
+        System.out.println("Data was inserted Successfully");
+        
+        // Clear the text fields after successfully inserting data
+        titleTextField.setText("");
+        artistTextField.setText("");
+        
+        // Display the inserted data in the proper text boxes
+        idTextField.setText(String.valueOf(data.get(data.size()-1).getId()));
+        titleTextField.setText(data.get(data.size()-1).getTitle());
+        artistTextField.setText(data.get(data.size()-1).getArtist());
+
+        // Set a message in the footer label
+        footerLabel.setText("Record inserted into the table successfully!");
+    } catch (SQLException ex) {
+        System.out.println(ex.toString());
+    }
+}
+
 
     private void CreateSQLiteTable() {
         // SQL statement for creating a new table
@@ -496,7 +559,7 @@ insert("Your Name.",2016,"PG");
             System.out.println(e.getMessage());
         }
     }
-
+/*
     public void deleteRecord(int id, int selectedIndex) { //id to remove from DB, selectedIndex to remove from table
 
         Connection conn = null;
@@ -547,7 +610,58 @@ insert("Your Name.",2016,"PG");
             }
 
         }
+    } */
+    
+    public void deleteRecord(int id, int selectedIndex) {
+    Connection conn = null;
+    PreparedStatement preparedStatement = null;
+    
+    try {
+        conn = DriverManager.getConnection(databaseURL);
+        
+        // Use a parameterized query to prevent SQL injection
+        String sql = "DELETE FROM Songs WHERE id = ?";
+        preparedStatement = conn.prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    } finally {
+        try {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+        tableView.getItems().remove(selectedIndex);
+        System.out.println("Record Deleted Successfully");
     }
+}
+    
+    @FXML
+private void handleDeleteAction(ActionEvent event) throws IOException {
+    System.out.println("Delete Song");
+    
+    if (tableView.getSelectionModel().getSelectedItem() != null) {
+        int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+        System.out.println("Selected Index: " + selectedIndex);
+        
+        if (selectedIndex >= 0) {
+            Song song = (Song) tableView.getSelectionModel().getSelectedItem();
+            System.out.println("ID: " + song.getId());
+            System.out.println("Title: " + song.getTitle());
+            System.out.println("Artist: " + song.getArtist());
+            deleteRecord(song.getId(), selectedIndex);
+        }
+    }
+}
+
+
 
     Integer index = -1;
 
@@ -573,6 +687,7 @@ insert("Your Name.",2016,"PG");
 
     }
 
+    
 
     @SuppressWarnings("empty-statement")
     public ObservableList<Song> search(String _title, String _artist) throws SQLException {
@@ -641,35 +756,37 @@ insert("Your Name.",2016,"PG");
 
      * @throws java.sql.SQLException
      */
-    public void update(String title, String artist, int selectedIndex, int id) throws SQLException {
+    //public void update(String title, String artist, int selectedIndex, int id) throws SQLException {
 
-        Connection conn = null;
+      /* public void update(int id, String title, String artist) throws SQLException {
+
+    Connection conn = null;
+    try {
+        // create a connection to the database
+        conn = DriverManager.getConnection(databaseURL);
+        String sql = "UPDATE songs SET title = ?, artist = ? WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, title);
+        pstmt.setString(2, artist);
+        pstmt.setInt(3, id);
+
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    } finally {
         try {
-            // create a connection to the database
-            conn = DriverManager.getConnection(databaseURL);
-            String sql = "UPDATE songs SET title = ?, artist =?, Where id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, title);
-            pstmt.setString(2, artist);
-            pstmt.setString(4, Integer.toString(id));
-
-            pstmt.executeUpdate();
-            pstmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+            if (conn != null) {
+                conn.close();
             }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
-
     }
+
+}
+
+
+    
 
     @FXML
     private void handleUpdateRecord(ActionEvent event) throws IOException, SQLException {
@@ -706,7 +823,65 @@ insert("Your Name.",2016,"PG");
 
         }
 
+    } */
+    
+    
+    public void update(int id, String title, String artist) throws SQLException {
+    Connection conn = null;
+    
+    try {
+        conn = DriverManager.getConnection(databaseURL);
+        String sql = "UPDATE Songs SET title = ?, artist = ? WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, title);
+        pstmt.setString(2, artist);
+        pstmt.setInt(3, id);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    } finally {
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
+}
+
+@FXML
+private void handleUpdateRecord(ActionEvent event) throws IOException {
+    if (tableView.getSelectionModel().getSelectedItem() != null) {
+        int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex >= 0) {
+            Song song = (Song) tableView.getSelectionModel().getSelectedItem();
+            System.out.println("ID: " + song.getId());
+            
+            int updatedID = song.getId();
+            updatedID++;
+            String updatedTitle = titleTextField.getText(); // Get the updated title from your UI
+            String updatedArtist = artistTextField.getText(); // Get the updated artist from your UI
+
+            try {
+                update(updatedID, updatedTitle, updatedArtist);
+                System.out.println("Record updated successfully!");
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+            }
+            
+           // id
+            titleTextField.setText("");
+            artistTextField.setText("");
+
+            footerLabel.setText("Record updated successfully!");
+
+            // You don't need to clear data and refresh the table view if you only updated one record.
+        }
+    }
+}
+
 
     @FXML
     private void sidebarShowAllRecords() {
@@ -782,7 +957,7 @@ insert("Your Name.",2016,"PG");
 
                 try {
                     // insert a new rows
-                    update(titleTextField.getText(), artistTextField.getText(), selectedIndex, song.getId());
+                    update(song.getId(), titleTextField.getText(), artistTextField.getText(), /* selectedIndex */);
 
                     System.out.println("Record updated successfully!");
                 } catch (SQLException ex) {
