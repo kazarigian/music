@@ -34,12 +34,12 @@
     <left>
         <VBox prefHeight="500.0" prefWidth="192.0" styleClass="sidebar-section">
             <children>
-                <Label onMouseClicked="#sidebarAddNewRecord" styleClass="btn-primary" text="Add New Movie">
+                <Label onMouseClicked="#sidebarAddNewRecord" styleClass="btn-primary" text="Add New Song">
                <stylesheets>
                   <URL value="@demo.css" />
                   <URL value="@styles.css" />
                </stylesheets></Label>
-                <Label onMouseClicked="#sidebarDeleteRecord" styleClass="btn-danger" text="Delete Movie ">
+                <Label onMouseClicked="#sidebarDeleteRecord" styleClass="btn-danger" text="Delete Song ">
                <stylesheets>
                   <URL value="@demo.css" />
                   <URL value="@styles.css" />
@@ -67,7 +67,7 @@
     <center>
         <VBox fx:id="vBox" minHeight="500.0" prefHeight="500.0" styleClass="content-section">
             <children>
-                <Label id="content-header" stylesheets="@demo.css" text="Movies Database Application Test" textFill="#11c3c6" />
+                <Label id="content-header" stylesheets="@demo.css" text="Songs Database Application Test" textFill="#11c3c6" />
             
                 <!-- container using pref size as max size to not grow larger than the image -->
                 <VBox maxHeight="-Infinity" maxWidth="-Infinity" styleClass="my-rect" stylesheets="@demo.css" />  
