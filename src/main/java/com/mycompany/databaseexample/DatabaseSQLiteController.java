@@ -81,6 +81,7 @@ public class DatabaseSQLiteController implements Initializable {
     }
 
     private void intializeColumns() {
+        //make sure to add comments  here
         id = new TableColumn("ID");
         id.setMinWidth(50);
         id.setCellValueFactory(new PropertyValueFactory<Song, Integer>("id"));
