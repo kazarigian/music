@@ -11,6 +11,10 @@ public class App extends Application {
 
     private static Scene scene;
 
+    // Add the following line to the start method
+    // Add the following line to the start method
+
+
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("login"), 800, 600); //DatabaseSQLite
