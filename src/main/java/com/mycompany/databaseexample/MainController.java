@@ -76,6 +76,19 @@ public class MainController {
 
     }   
     
+    private void artists() throws IOException {
+
+        try {
+            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("DatabaseSQLite_Artist.fxml"));
+            contentPane.getChildren().clear();
+            contentPane.getChildren().add(newLoadedPane);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }  
+    
     
     @FXML
     private void close() throws IOException {
