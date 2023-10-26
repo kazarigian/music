@@ -15,7 +15,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"), 800, 600); //DatabaseSQLite
+        scene = new Scene(loadFXML("main"), 800, 600); //DatabaseSQLite
         stage.setScene(scene);
         stage.show();
     }

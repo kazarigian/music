@@ -76,6 +76,7 @@ public class MainController {
 
     }   
     
+    @FXML
     private void artists() throws IOException {
 
         try {

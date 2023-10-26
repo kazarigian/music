@@ -62,7 +62,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
         createSQLiteTable();
     }
 
-    String databaseURL = "jdbc:sqlite:src/main/resources/com/mycompany/databaseexample/songs.db.sql";
+    String databaseURL = "jdbc:sqlite:src/main/resources/com/mycompany/databaseexample/artists.db";
 
     /* Connect to a sample database
      */
@@ -79,19 +79,20 @@ public class DatabaseSQLiteController_Artist implements Initializable {
         this.data = FXCollections.observableArrayList(); //a moveable list of artists
     }
 
-    /*private void intializeColumns() {
+   // /*
+    private void intializeColumns() {
         //make sure to add comments  here
         id = new TableColumn("ID");
         id.setMinWidth(50);
         id.setCellValueFactory(new PropertyValueFactory<Artist, Integer>("id"));
 
-        TableColumn title = new TableColumn("Name");
-        title.setMinWidth(450);
-        title.setCellValueFactory(new PropertyValueFactory<Artist, String>("name"));
+        TableColumn name = new TableColumn("Name");
+        name.setMinWidth(450);
+        name.setCellValueFactory(new PropertyValueFactory<Artist, String>("name"));
 
-        TableColumn artist = new TableColumn("Genre");
-        artist.setMinWidth(100);
-        artist.setCellValueFactory(new PropertyValueFactory<Song, String>("genre"));
+        TableColumn genre = new TableColumn("Genre");
+        genre.setMinWidth(100);
+        genre.setCellValueFactory(new PropertyValueFactory<Artist, String>("genre"));
         
         TableColumn songs = new TableColumn("Songs");
         songs.setMinWidth(100);
@@ -103,8 +104,10 @@ public class DatabaseSQLiteController_Artist implements Initializable {
         
         //tableView.setOpacity(0.3);
         ///* Allow for the values in each cell to be changable 
-    } */
+    } 
+//*/
     
+    /*
     private void intializeColumns() {
     // Make sure to add comments here
     TableColumn<Artist, Integer> id = new TableColumn<>("ID");
@@ -126,9 +129,10 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     tableView.setItems(data);
     tableView.getColumns().addAll(id, name, genre, songs);
 
-    // tableView.setOpacity(0.3);
-    /* Allow for the values in each cell to be changable */
+    // tableView.setOpacity(0.3); // Allow for the values in each cell to be changable 
 }
+    */
+
 
 
     public void loadData() throws SQLException {
@@ -189,12 +193,13 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     /**
      * Insert a new row into the songs table
      *
-     * @param title
-     * @param artist
+     * @param name
+     * @param genre
+     * @param songs
 
      * @throws java.sql.SQLException
      */
-    public void insert(String name, String genre, String songs) throws SQLException {
+    public void ainsert(String name, String genre, String songs) throws SQLException {
         int last_inserted_id = 0;
         Connection conn = null;
         try {
@@ -237,7 +242,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     }
 
     @FXML
-    public void handleAddSong(ActionEvent actionEvent) {
+    public void handleAAddArtist(ActionEvent actionEvent) {
 
         //System.out.println("Title: " + titleTextField.getText() + "\nArtist: " + artistTextField.getText());//only prints in console (user doesn't see)
        
@@ -245,7 +250,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
         
         try {
             // insert a new rows
-            insert(nameTextField.getText(), genreTextField.getText(), songsTextField.getText());
+            ainsert(nameTextField.getText(), genreTextField.getText(), songsTextField.getText());
             System.out.println("Data was inserted Successfully");
         } catch (SQLException ex) {
             System.out.println(ex.toString());
@@ -274,7 +279,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
         }
     }
 
-    public void deleteRecord(int id, int selectedIndex) { //id to remove from DB, selectedIndex to remove from table
+    public void deleteARecord(int id, int selectedIndex) { //id to remove from DB, selectedIndex to remove from table
 
         Connection conn = null;
         PreparedStatement preparedStatement = null;
@@ -303,7 +308,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     }
 
     @FXML
-    private void handleDeleteAction(ActionEvent event) throws IOException {
+    private void handleADeleteAction(ActionEvent event) throws IOException {
         System.out.println("Delete Artist");
         //Check whether item is selected and set value of selected item to Label
         if (tableView.getSelectionModel().getSelectedItem() != null) {
@@ -319,7 +324,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
                 System.out.println("Name: " + artist.getName());
                 System.out.println("Genre: " + artist.getGenre());
                 System.out.println("Songs: " + artist.getSong());
-                deleteRecord(artist.getID(), selectedIndex);
+                deleteARecord(artist.getID(), selectedIndex);
             }
 
         }
@@ -328,7 +333,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     Integer index = -1;
 
     @FXML
-    private void showRowData() {
+    private void showARowData() {
 
         index = tableView.getSelectionModel().getSelectedIndex();
         if (index <= -1) {
@@ -351,7 +356,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
 
 
     @SuppressWarnings("empty-statement")
-    public ObservableList<Artist> search(String _name, String _genre) throws SQLException {
+    public ObservableList<Artist> asearch(String _name, String _genre) throws SQLException {
         ObservableList<Artist> searchResult = FXCollections.observableArrayList();
         // read data from SQLite database
         createSQLiteTable();
@@ -398,15 +403,15 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     }
 
     @FXML
-    private void handleSearchAction(ActionEvent event) throws IOException, SQLException {
+    private void handleASearchAction(ActionEvent event) throws IOException, SQLException {
         String _name = nameTextField.getText().trim();
         String _genre = genreTextField.getText().trim();
-        ObservableList<Artist> tableItems = search(_name, _genre);
+        ObservableList<Artist> tableItems = asearch(_name, _genre);
         tableView.setItems(tableItems);
     }
 
     @FXML
-    private void handleShowAllRecords(ActionEvent event) throws IOException, SQLException {
+    private void handleAShowAllRecords(ActionEvent event) throws IOException, SQLException {
         tableView.setItems(data);
 
     }
@@ -414,12 +419,13 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     /**
      * Update a record in the songs table
      *
-     * @param title
-     * @param artist
+     * @param name
+     * @param genre
+     * @param songs
 
      * @throws java.sql.SQLException
      */
-    public void update(String name, String genre, String songs, int selectedIndex, int id) throws SQLException {
+    public void aupdate(String name, String genre, String songs, int selectedIndex, int id) throws SQLException {
 
        //public void update(int id, String title, String artist) throws SQLException {
 
@@ -452,7 +458,7 @@ conn = DriverManager.getConnection(databaseURL);
    
 
     @FXML
-    private void handleUpdateRecord(ActionEvent event) throws IOException, SQLException {
+    private void handleAUpdateRecord(ActionEvent event) throws IOException, SQLException {
 
          if (tableView.getSelectionModel().getSelectedItem() != null) {
             int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
@@ -462,7 +468,7 @@ conn = DriverManager.getConnection(databaseURL);
                 Artist artist = (Artist) tableView.getSelectionModel().getSelectedItem();
                 System.out.println("ID: " + artist.getID());
                 try {
-                    update(nameTextField.getText(), genreTextField.getText(), songsTextField.getText(), selectedIndex, artist.getID());
+                    aupdate(nameTextField.getText(), genreTextField.getText(), songsTextField.getText(), selectedIndex, artist.getID());
                     System.out.println("Record updated successfully!");
                 } catch (SQLException ex) {
                     System.out.println(ex.toString());
@@ -479,15 +485,15 @@ conn = DriverManager.getConnection(databaseURL);
     }
 
     @FXML
-    private void sidebarShowAllRecords() {
+    private void sidebarAShowAllRecords() {
         tableView.setItems(data);
     }
 
     @FXML
-    private void sidebarAddNewRecord() {
+    private void sidebarAAddNewRecord() {
 System.out.println("Name: " + nameTextField.getText() + "\nGenre: " + genreTextField.getText() + "\nSongs: " + songsTextField.getText());
         try {
-            insert(nameTextField.getText(), genreTextField.getText(), songsTextField.getText());
+            ainsert(nameTextField.getText(), genreTextField.getText(), songsTextField.getText());
             System.out.println("Data was inserted Successfully");
         } catch (SQLException ex) {
             System.out.println(ex.toString());
@@ -499,7 +505,7 @@ System.out.println("Name: " + nameTextField.getText() + "\nGenre: " + genreTextF
     }  
       
     @FXML
-    private void sidebarDeleteRecord() {
+    private void sidebarADeleteRecord() {
          System.out.println("Delete Artist");
         if (tableView.getSelectionModel().getSelectedItem() != null) {
             int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
@@ -511,22 +517,22 @@ System.out.println("Name: " + nameTextField.getText() + "\nGenre: " + genreTextF
                 System.out.println("Name: " + artist.getName());
                 System.out.println("Genre: " + artist.getGenre());
                 System.out.println("Songs: " + artist.getSong());
-                deleteRecord(artist.getID(), selectedIndex);
+                deleteARecord(artist.getID(), selectedIndex);
             }
         }
     }
 
     @FXML
-    private void sidebarSearch() throws SQLException {
+    private void sidebarASearch() throws SQLException {
         String _name = nameTextField.getText().trim();
         String _genre = genreTextField.getText().trim();
-        ObservableList<Artist> tableItems = search(_name, _genre);
+        ObservableList<Artist> tableItems = asearch(_name, _genre);
         tableView.setItems(tableItems);
     }
 
     
      @FXML
-    private void sidebarUpdateRecord() throws SQLException {
+    private void sidebarAUpdateRecord() throws SQLException {
         //Check whether item is selected and set value of selected item to Label
         if (tableView.getSelectionModel().getSelectedItem() != null) {
             int selectedIndex = tableView.getSelectionModel().getSelectedIndex();
@@ -536,7 +542,7 @@ System.out.println("Name: " + nameTextField.getText() + "\nGenre: " + genreTextF
                 Artist artist = (Artist) tableView.getSelectionModel().getSelectedItem();
                 System.out.println("ID: " + artist.getID());
                 try {
-                    update(nameTextField.getText(), genreTextField.getText(), songsTextField.getText(), selectedIndex, artist.getID());
+                    aupdate(nameTextField.getText(), genreTextField.getText(), songsTextField.getText(), selectedIndex, artist.getID());
                     System.out.println("Record updated successfully!");
                 } catch (SQLException ex) {
                     System.out.println(ex.toString());

@@ -28,7 +28,7 @@
             </items>
             
              <items>
-              <MenuItem mnemonicParsing="false" onAction="#songs" text="Artist Database" />
+              <MenuItem mnemonicParsing="false" onAction="#artists" text="Artist Database" />
             </items>
             
           </Menu>
