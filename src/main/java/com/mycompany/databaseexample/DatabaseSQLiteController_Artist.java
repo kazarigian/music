@@ -49,7 +49,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     @FXML
     Label footerLabel;
     @FXML
-    TableColumn id = new TableColumn("ID");
+    //TableColumn id = new TableColumn("ID");
 
     @Override
      public void initialize(URL location, ResourceBundle rb) {
@@ -82,10 +82,11 @@ public class DatabaseSQLiteController_Artist implements Initializable {
    // /*
     private void intializeColumns() {
         //make sure to add comments  here
-        id = new TableColumn("ID");
+        /*id = new TableColumn("ID");
         id.setMinWidth(50);
+        //id.setCellValueFactory(new PropertyValueFactory<Artist, Integer>("id"));
         id.setCellValueFactory(new PropertyValueFactory<Artist, Integer>("id"));
-
+        
         TableColumn name = new TableColumn("Name");
         name.setMinWidth(450);
         name.setCellValueFactory(new PropertyValueFactory<Artist, String>("name"));
@@ -96,15 +97,38 @@ public class DatabaseSQLiteController_Artist implements Initializable {
         
         TableColumn songs = new TableColumn("Songs");
         songs.setMinWidth(100);
-        songs.setCellValueFactory(new PropertyValueFactory<Artist, String>("songs"));
+        songs.setCellValueFactory(new PropertyValueFactory<Artist, String>("song"));
         
        tableView.setItems(data);
-       tableView.getColumns().addAll(id, name, genre, songs);
+       tableView.getColumns().addAll(id, name, genre, songs); */
 
+        
+     
+    TableColumn id = new TableColumn("ID");
+    id.setMinWidth(50);
+    id.setCellValueFactory(new PropertyValueFactory<Artist, Integer>("ID"));
+    
+    TableColumn name = new TableColumn("Name");
+    name.setMinWidth(450);
+    name.setCellValueFactory(new PropertyValueFactory<Artist, String>("name"));
+
+    TableColumn genre = new TableColumn("Genre");
+    genre.setMinWidth(100);
+    genre.setCellValueFactory(new PropertyValueFactory<Artist, String>("genre"));
+    
+    TableColumn songs = new TableColumn("Songs");
+    songs.setMinWidth(100);
+    songs.setCellValueFactory(new PropertyValueFactory<Artist, String>("song"));
+    
+    tableView.setItems(data);
+    tableView.getColumns().addAll(id, name, genre, songs);
+}
+
+        
         
         //tableView.setOpacity(0.3);
         ///* Allow for the values in each cell to be changable 
-    } 
+    
 //*/
     
     /*
@@ -267,7 +291,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
                 + " id integer PRIMARY KEY,\n"
                 + " name text NOT NULL,\n"
                 + " genre text NOT NULL,\n"
-                + " songs text\n"
+                + " song text NOT NULL\n"
                 + ");";
 
         try (Connection conn = DriverManager.getConnection(databaseURL);
@@ -356,7 +380,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
 
 
     @SuppressWarnings("empty-statement")
-    public ObservableList<Artist> asearch(String _name, String _genre) throws SQLException {
+    public ObservableList<Artist> asearch(String _name, String _genre, String _song) throws SQLException {
         ObservableList<Artist> searchResult = FXCollections.observableArrayList();
         // read data from SQLite database
         createSQLiteTable();
@@ -366,6 +390,9 @@ public class DatabaseSQLiteController_Artist implements Initializable {
         }
         if (!_genre.isEmpty()) {
             sql += " and genre ='" + _genre + "'";
+        }
+          if (!_song.isEmpty()) {
+            sql += " and song ='" + _song + "'";
         }
         System.out.println(sql);
         try (Connection conn = DriverManager.getConnection(databaseURL);
@@ -385,10 +412,17 @@ public class DatabaseSQLiteController_Artist implements Initializable {
                     String artist = rs.getString("artist");
                     */
                     
+                    /*int recordId = rs.getInt("id");
+                    String name = rs.getString("name");
+                    String genre = rs.getString("genre");
+                    String songs = rs.getString("songs");
+                    */
+                    
                     int recordId = rs.getInt("id");
                     String name = rs.getString("name");
                     String genre = rs.getString("genre");
                     String songs = rs.getString("songs");
+
                     
                     Artist artist = new Artist(recordId, name, genre, songs);
                     searchResult.add(artist);
@@ -406,7 +440,8 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     private void handleASearchAction(ActionEvent event) throws IOException, SQLException {
         String _name = nameTextField.getText().trim();
         String _genre = genreTextField.getText().trim();
-        ObservableList<Artist> tableItems = asearch(_name, _genre);
+        String _song = songsTextField.getText().trim();
+        ObservableList<Artist> tableItems = asearch(_name, _genre, _song);
         tableView.setItems(tableItems);
     }
 
@@ -433,7 +468,7 @@ public class DatabaseSQLiteController_Artist implements Initializable {
     try {
         // create a connection to the database
 conn = DriverManager.getConnection(databaseURL);
-            String sql = "UPDATE Artists SET name = ?, genre = ?, songs = ? WHERE id = ?";
+            String sql = "UPDATE Artists SET name = ?, genre = ?, song = ? WHERE id = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, name);
             pstmt.setString(2, genre);
@@ -473,6 +508,7 @@ conn = DriverManager.getConnection(databaseURL);
                 } catch (SQLException ex) {
                     System.out.println(ex.toString());
                 }
+                
                 nameTextField.setText("");
                 genreTextField.setText("");
                 songsTextField.setText("");
@@ -526,7 +562,8 @@ System.out.println("Name: " + nameTextField.getText() + "\nGenre: " + genreTextF
     private void sidebarASearch() throws SQLException {
         String _name = nameTextField.getText().trim();
         String _genre = genreTextField.getText().trim();
-        ObservableList<Artist> tableItems = asearch(_name, _genre);
+        String _song = songsTextField.getText().trim();
+        ObservableList<Artist> tableItems = asearch(_name, _genre, _song);
         tableView.setItems(tableItems);
     }
 
@@ -540,7 +577,7 @@ System.out.println("Name: " + nameTextField.getText() + "\nGenre: " + genreTextF
             if (selectedIndex >= 0) {
                 System.out.println(index);
                 Artist artist = (Artist) tableView.getSelectionModel().getSelectedItem();
-                System.out.println("ID: " + artist.getID());
+                System.out.println("id: " + artist.getID());
                 try {
                     aupdate(nameTextField.getText(), genreTextField.getText(), songsTextField.getText(), selectedIndex, artist.getID());
                     System.out.println("Record updated successfully!");
