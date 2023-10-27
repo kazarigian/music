@@ -43,7 +43,7 @@
          <children>
             <ImageView fitHeight="717.0" fitWidth="1279.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Overpass.png" />
+                  <Image url="@https://png.pngtree.com/png-vector/20220723/ourmid/pngtree-music-note-staves-png-image_5998977.png" />
                </image>
             </ImageView>
             <TextField prefHeight="142.0" prefWidth="1280.0" text="Main" />
